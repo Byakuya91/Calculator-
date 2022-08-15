@@ -11,13 +11,29 @@ body {
     background: linear-gradient(to right, #00AAFF, #939e98);
   }
 
-/* grid layout for calculator buttons  */
+/* grid layout for calculator   */
 .calc-grid {
     display: grid;
     margin-top: 2rem;
     justify-content: center;
     grid-template-columns: repeat(4, 6rem);
     grid-template-rows: minmax(7rem, auto) repeat(5, 6rem);
+  }
+
+
+  /* grid for individual buttons  */
+
+  .calc-grid button {
+      font-size: 2rem;
+      cursor: pointer;
+      border: 1px solid  white;
+      outline: none;
+      background-color: rgba(255,255,255, .75 );
+
+  } 
+  .calc-grid > button:hover,
+  .calc-grid > button:focus {
+    background-color: rgba(255, 255, 255, .9);
   }
 
 /* top buttons for the calculator */
