@@ -1,12 +1,12 @@
 import React from "react";
-
+import "./styles.css";
 function App() {
   return (
     <div className="calc-grid">
       {/* Calculator display */}
       <div className="calc-output">
-        <div className="calc-previous-operand"></div>
-        <div className="calc-current-operand"></div>
+        <div className="calc-previous-operand">50,000 *</div>
+        <div className="calc-current-operand">50,000</div>
       </div>
       {/* Calculator buttons */}
       <button className="calc-span-two">AC</button>
