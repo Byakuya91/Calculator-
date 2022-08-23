@@ -19,14 +19,83 @@ function reducer(state, { type, payload }) {
   switch (type) {
     case ACTIONS.ADD_DIGIT:
       // checking for edge cases
-      if (payload.digit === "0" && state.currentOperand === "0") return state;
+      if (payload.digit === "0" && state.currentOperand === "0") {
+        return state;
+      }
+
       if (payload.digit === "." && state.currentOperand.includes("."))
         return state;
+
       return {
         ...state,
         currentOperand: payload.digit,
       };
+
+    // actions: choosing an operation
+    case ACTIONS.CHOOSE_OPERATION:
+      if (state.currentOperand == null && state.previousOperand == null) {
+        return state;
+      }
+
+      // overwrite your operation
+      if (state.currentOperand == null) {
+        return {
+          ...state,
+          operation: payload.operation,
+        };
+      }
+
+      //  saves current operand to previous and shows smaller number appearing on the calculator on the top.
+      if (state.previousOperand == null) {
+        return {
+          ...state,
+          operation: payload.operation,
+          previousOperand: state.currentOperand,
+          currentOperand: null,
+        };
+      }
+      // default action when doing calculation with the calculator
+      return {
+        ...state,
+        previousOperand: evaluate(state),
+        operation: payload.operation,
+        currentOperand: null,
+      };
+
+    //  action to clear the digits
+    case ACTIONS.CLEAR:
+      return {};
   }
+}
+
+// evaluation function for calculator computations
+function evaluate({ currentOperand, previousOperand, operation }) {
+  // convert the strings into numbers to do calculations
+  const prev = parseFloat(previousOperand);
+  const current = parseFloat(currentOperand);
+
+  // checking to see if prev and current operands do NOT exist.
+  if (isNaN(prev) || isNaN(current)) return "";
+
+  // by default computation will equal an empty string
+  let computation = "";
+  //  switch case to intiate the calculations
+  switch (operation) {
+    case "+":
+      computation = prev + current;
+      break;
+    case "-":
+      computation = prev - current;
+      break;
+    case "*":
+      computation = prev * current;
+      break;
+    case "÷":
+      computation = prev / current;
+      break;
+  }
+  //  values for computation will be returned
+  return computation.toString();
 }
 
 function App() {
@@ -55,7 +124,12 @@ function App() {
         <div className="calc-current-operand">{currentOperand}</div>
       </div>
       {/* Calculator buttons */}
-      <button className="calc-span-two">AC</button>
+      <button
+        className="calc-span-two"
+        onClick={() => dispatch({ type: ACTIONS.CLEAR })}
+      >
+        AC
+      </button>
       <button>DEL</button>
       <OperationButton operation="÷" dispatch={dispatch} />
       <DigitButton digit="1" dispatch={dispatch} />
